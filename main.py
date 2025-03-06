@@ -5,26 +5,26 @@ import telebot
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton
 from dotenv import load_dotenv
 
-# Load environment variables
+
 load_dotenv()
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 NEWS_API_KEY = os.getenv("NEWS_API_KEY")
 NEWS_API_URL = "https://newsapi.org/v2/top-headlines"
 
-# Initialize bot
+
 bot = telebot.TeleBot(TOKEN)
 logging.basicConfig(level=logging.INFO)
 
-# In-memory storage for user preferences (SQLite can be used instead)
+
 user_preferences = {}
 
-# Keyboard buttons
+
 menu_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 menu_keyboard.add(KeyboardButton("📰 Актуальные новости"))
 menu_keyboard.add(KeyboardButton("🔎 Поиск по теме"))
 menu_keyboard.add(KeyboardButton("⚙ Настройки"))
 
-# Fetch latest news
+# получить последние новости
 def fetch_news(category=None, query=None):
     url = NEWS_API_URL if not query else "https://newsapi.org/v2/everything"  # Базовые параметры запроса
     params = {"apiKey": NEWS_API_KEY, "language": "ru"}  # Базовые параметры запроса
@@ -49,7 +49,8 @@ def fetch_news(category=None, query=None):
         logging.error(f"API Request Error: {e}")  # Логируем ошибку
         return []  # Возвращаем пустой список, если произошла ошибка
 
-# Command handlers
+
+# команды
 @bot.message_handler(commands=['start'])
 def start(message):
     bot.send_message(message.chat.id, "Привет! Я новостной бот. Выберите действие:", reply_markup=menu_keyboard)
